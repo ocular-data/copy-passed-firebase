@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome to Firebase Hosting</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+
+  <!-- update the version number as needed -->
+  <script src="/__/firebase/7.14.1/firebase-app.js"></script>
+  <!-- include only the Firebase features as you need -->
+  <script src="/__/firebase/7.14.1/firebase-auth.js"></script>
+  <script src="/__/firebase/7.14.1/firebase-database.js"></script>
+  <script src="/__/firebase/7.14.1/firebase-messaging.js"></script>
+  <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+  
+  <style media="screen">
+    body {
+      background: #ECEFF1;
+      color: rgba(0, 0, 0, 0.87);
+      font-family: Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    #message {
+      background: white;
+      max-width: 360px;
+      margin: 100px auto 16px;
+      padding: 32px 24px;
+      border-radius: 3px;
+    }
+
+    #message h2 {
+      color: #ffa100;
+      font-weight: bold;
+      font-size: 16px;
+      margin: 0 0 8px;
+    }
+
+    #message h1 {
+      font-size: 22px;
+      font-weight: 300;
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0 0 16px;
+    }
+
+    #message p {
+      line-height: 140%;
+      margin: 16px 0 24px;
+      font-size: 14px;
+    }
+
+    #message a {
+      display: block;
+      text-align: center;
+      background: #039be5;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: white;
+      padding: 16px;
+      border-radius: 4px;
+    }
+
+    #message,
+    #message a {
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    }
+
+    #load {
+      color: rgba(0, 0, 0, 0.4);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+
+      body,
+      #message {
+        margin-top: 0;
+        background: white;
+        box-shadow: none;
+      }
+
+      body {
+        border-top: 16px solid #ffa100;
+      }
+    }
+  </style>
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyCoWN0kJax58ltz0YRE0Cma1tYh09lnLjw",
+      authDomain: "copy-passed.firebaseapp.com",
+      databaseURL: "https://copy-passed.firebaseio.com",
+      projectId: "copy-passed",
+      storageBucket: "copy-passed.appspot.com",
+      messagingSenderId: "789070643371",
+      appId: "1:789070643371:web:2b5e2f3dc3e9f2987677ee"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+    var uiConfig = {
+      callbacks: {
+        signInSuccessWithAuthResult: function (authResult, redirectUrl) {
+          // User successfully signed in.
+          // Return type determines whether we continue the redirect automatically
+          // or whether we leave that to developer to handle.
+          return true;
+        },
+        uiShown: function () {
+          // The widget is rendered.
+          // Hide the loader.
+          document.getElementById('loader').style.display = 'none';
+        }
+      },
+      // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+      signInFlow: 'popup',
+      signInSuccessUrl: '/',
+      signInOptions: [
+        // Leave the lines as is for the providers you want to offer your users.
+
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+        firebase.auth.GithubAuthProvider.PROVIDER_ID,
+        {
+          provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+          requireDisplayName: false
+        },
+      ],
+      // Terms of service url.
+      tosUrl: '<your-tos-url>',
+      // Privacy policy url.
+      privacyPolicyUrl: '<your-privacy-policy-url>'
+    };
+    function toggle(className, displayState) {
+      var elements = document.getElementsByClassName(className)
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].style.display = displayState;
+      }
+    }
+
+
+
+  </script>
+</head>
+
+<body>
+  <section class="hero">
+    <h1 class="title">Copy-passed</h1>
+  </section>
+
+
+  <button class="button logged_in" id="signOut">Sign Out</button> <a id="r1" class="logged_in"></a>
+
+  <div id="firebaseui-auth-container"></div>
+  <div id="loader" class="signed_out">Loading...</div>
+
+  <p>
+    <section class="hero">
+      <h2 class="title">Future features</h2>
+    </section>
+
+
+    <div class="list is-hoverable">
+      <a class="list-item">encryption at the endpoint (secured transfer and storage) </a>
+
+      <a class="list-item">groups, copy a command line, send to a friend</a>
+      <a class="list-item"> buffer of last N pasteboards, multiple pasteboards. </a>
+
+    </div>
+    <div class="logged_in">
+    <textarea type="text" id="lname" name="lname"></textarea><br><br>
+  </div>
+  </p>
+  <script>
+    var uid=null;
+    document.addEventListener('DOMContentLoaded', function () {
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          uid = user.uid;
+          toggle('logged_in', 'flex');
+          toggle('signed_out', 'none');
+          document.getElementById('r1').innerText = 'Signed in as : ' + (user.display_name || user.email);
+          // The key of any non-root reference is the last token in the path
+          var k = `users/${uid}/last`
+          var ref = firebase.database().ref(k);
+          ref.on('value', function (vv) {
+            document.getElementById('lname').value = vv.val();
+          });
+
+        } else {
+          uid = null;
+          toggle('logged_in', 'none');
+          toggle('signed_out', 'block');
+          document.getElementById('r1').innerText = 'NOT SIGNED IN';
+
+
+          ui.start('#firebaseui-auth-container', uiConfig);
+        }
+      });
+      firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+      // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+
+    });
+
+    document.getElementById('signOut').addEventListener('click', function (event) {
+      firebase.auth().signOut();
+    });
+    document.getElementById('lname').addEventListener('input', function (evt) {
+      document.getElementById('lname').style.background = '#BB4';
+    });
+    document.getElementById('lname').addEventListener('change', function (evt) {
+      if (uid) {
+
+        var k = `users/${uid}/last`
+          var ref = firebase.database().ref(k); 
+          ref.set(evt.target.value);
+          document.getElementById('lname').style.background = '#FFF';
+      }
+      else{
+
+      }
+    });
+    document.getElementById('signOut').style.display = 'none';
+
+  </script>
+</body>
+
+</html>
+
+
+
