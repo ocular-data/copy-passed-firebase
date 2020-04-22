@@ -17,11 +17,10 @@ exports.pushHistory = functions.database.ref('/users/{Uid}')
         let before = change.before.val();
         let after = change.after.val();
 
-        after.history = {};
-        after.history["1"] = before["last"];
+        after.history = {"0": before["last"]};
 
-        for (let i = 1; i < max_history; i++) {
-            if (!(i.toString() in before.history)) break;
+        for (let i = 0; i < max_history; i++) {
+            if (!before.history || !(i.toString() in before.history)) break;
             after.history[(i + 1).toString()] = before.history[i.toString()];
         }
 
