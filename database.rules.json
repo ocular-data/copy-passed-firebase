@@ -10,8 +10,14 @@
     },
     "users": {
       "$uid": {
-        ".read": "$uid == auth.uid",
-        ".write": "$uid == auth.uid"
+        "history": {
+          ".read": "$uid == auth.uid",
+          ".write": false
+        },
+        "last": {
+          ".read": "$uid == auth.uid",
+          ".write": "$uid == auth.uid"
+        }
       }
     }
   }

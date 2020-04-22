@@ -11,18 +11,18 @@ exports.pushHistory = functions.database.ref('/users/{Uid}')
             return null;
         }
         if (change.before.child("last").val() === change.after.child("last").val()) {
-            return null
+            return null;
         }
 
-        let before = change.before.val()
-        let after = change.after.val()
+        let before = change.before.val();
+        let after = change.after.val();
 
-        after["1"] = before["last"]
+        after.history = {};
+        after.history["1"] = before["last"];
 
         for (let i = 1; i < max_history; i++) {
-            if (!(i.toString() in before)) break;
-            after[(i + 1).toString()] = before[i.toString()]
-            change.before.ref
+            if (!(i.toString() in before.history)) break;
+            after.history[(i + 1).toString()] = before.history[i.toString()];
         }
 
         return change.after.ref.set(after);
