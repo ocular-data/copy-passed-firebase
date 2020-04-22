@@ -27,7 +27,7 @@ def put(ref, data):
 
 
 def add_user(request):
-    if not request.json or not 'id' in request.json:
+    if not request.json or 'id' not in request.json:
         return "Not Acceptable", 406
 
     delBlankw = False
