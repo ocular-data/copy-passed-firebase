@@ -87,17 +87,17 @@
             if (user) {
                 uid = user.uid;
 
-                const k = `waitlist/${id}`;
+                const k = `waitlist`;
                 const ref = firebase.database().ref(k);
-                ref.once("value", snapshot => {
-                    if (snapshot) {
-                        // exists
-                        ref.set(uid)
-                        //window.location.href= "/";
-                    }
+                if (id in ref) {
+                    // exists
+                    ref.set(uid);
+                    window.location.href= "/";
+                }
+                else {
                     //doesnt exist
                     window.location.replace("/");
-                });
+                }
 
             } else {
                 uid = null;
