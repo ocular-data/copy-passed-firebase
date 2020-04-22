@@ -41,9 +41,13 @@ def process_data(request):
 
         if not users.get():
             put(db.reference(), {"users": {uid: {"last": "0"}}})
-        if not users.child(uid).get:
+        if not users.child(uid).child("last").get():
             put(users, {uid: {"last": "0"}})
-        put(users.child(uid), {"last": request.json["data"]})
+        if not isinstance(request.json["data"], dict):
+            data = {"last": request.json["data"]}
+        else:
+            data = request.json["data"]
+        put(users.child(uid), data)
 
         return jsonify({"success": True}), 200
 
