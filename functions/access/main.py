@@ -30,10 +30,10 @@ def process_data(request):
         return "Forbidden", 403
 
     if request.json["method"] == "get":
-        result = None
+        result = {"last": None}
         if users.get() and uid in users.get():
             result = users.child(uid).get()
-        return jsonify({"data": result}), 202
+        return jsonify(result), 202
 
     elif request.json["method"] == "post":
         if "data" not in request.json:
