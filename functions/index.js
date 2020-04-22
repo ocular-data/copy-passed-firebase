@@ -10,7 +10,7 @@ exports.pushHistory = functions.database.ref('/users/{Uid}')
         if (!change.after.exists()) {
             return null;
         }
-        if (change.before.child("last").val()===change.after.child("last").val()){
+        if (change.before.child("last").val() === change.after.child("last").val()) {
             return null
         }
 
@@ -19,9 +19,9 @@ exports.pushHistory = functions.database.ref('/users/{Uid}')
 
         after["1"] = before["last"]
 
-        for (let i=1; i<max_history; i++){
+        for (let i = 1; i < max_history; i++) {
             if (!(i.toString() in before)) break;
-            after[(i+1).toString()] = before[i.toString()]
+            after[(i + 1).toString()] = before[i.toString()]
             change.before.ref
         }
 
