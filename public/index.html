@@ -145,23 +145,35 @@
 
     });
 
+    function sbmt (evt) {
+      if (uid) {
+
+        var k = `users/${uid}/last`;
+        var ref = firebase.database().ref(k);
+        ref.set(evt.target.value);
+        document.getElementById('lname').style.background = '#FFF';
+      }
+      else{
+      }
+    }
+
+    // enter will submit, shift+enter is new line
+    function submitOnEnter(event){
+      if(event.which === 13 && !event.shiftKey){
+        sbmt(event)
+        event.preventDefault(); // Prevents the addition of a new line in the text field (not needed in a lot of cases)
+      }
+    }
+
+    document.getElementById("lname").addEventListener("keypress", submitOnEnter);
+
     document.getElementById('signOut').addEventListener('click', function (event) {
       firebase.auth().signOut();
     });
     document.getElementById('lname').addEventListener('input', function (evt) {
       document.getElementById('lname').style.background = '#BB4';
     });
-    document.getElementById('lname').addEventListener('change', function (evt) {
-      if (uid) {
-
-        var k = `users/${uid}/last`;
-          var ref = firebase.database().ref(k);
-          ref.set(evt.target.value);
-          document.getElementById('lname').style.background = '#FFF';
-      }
-      else{
-      }
-    });
+    document.getElementById('lname').addEventListener('change', sbmt);
     document.getElementById('signOut').style.display = 'none';
 
   </script>
