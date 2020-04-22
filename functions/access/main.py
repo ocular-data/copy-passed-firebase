@@ -24,12 +24,14 @@ def process_data(request):
     if not request.json or any([i not in request.json for i in ['method', "id"]]):
         return "Not Acceptable", 406
 
-    uid = ids.child(request.json["id"]).get()
+    if ids.get() and request.json["id"] in ids.get():
+        uid = ids.child(request.json["id"]).get()
+    else:
+        return "Forbidden", 403
 
     if request.json["method"] == "get":
-        if users.get() and uid not in users.get():
-            result = None
-        else:
+        result = None
+        if users.get() and uid in users.get():
             result = users.child(uid).get()
         return jsonify({"data": result}), 202
 
@@ -38,8 +40,10 @@ def process_data(request):
             return "Not Acceptable", 406
 
         if not users.get():
-            put(db.reference(), {"users": {uid: 0}})
-        put(users, {uid: request.json["data"]})
+            put(db.reference(), {"users": {uid: {"last": "0"}}})
+        if not users.child(uid).get:
+            put(users, {uid: {"last": "0"}})
+        put(users.child(uid), {"last": request.json["data"]})
 
         return jsonify({"success": True}), 200
 
