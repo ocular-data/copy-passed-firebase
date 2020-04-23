@@ -32,10 +32,6 @@ def process_data(request):
     else:
         return "Forbidden", 403
 
-    for i, j in ids.get().items():
-        if j["timestamp"] <= time()-deleteAfterSeconds:
-            ids.child(i).delete()
-
     if request.json["method"] == "get":
         result = {"last": None}
         if users.get() and uid in users.get():
@@ -63,6 +59,11 @@ def process_data(request):
 
 
 def access(request):
+    if ids.get():
+        for i, j in ids.get().items():
+            if j["timestamp"] <= time() - deleteAfterSeconds:
+                ids.child(i).delete()
+
     if request.path == '/' or request.path == '':
         if request.method == 'POST':
             return process_data(request)
