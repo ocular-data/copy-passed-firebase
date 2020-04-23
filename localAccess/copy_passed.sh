@@ -48,9 +48,9 @@ oToken=$(cat $OathFile)
 
 if [ -p /dev/stdin ]; then
   input=$(cat | sed 's/\\/\\\\/g' | sed 's/\x22/\\\x22/g' | sed ':a;N;$!ba;s/\n/\\n/g')
-  payload='{"id":"'"$oToken"'","method":"post","data":'"$(printf "\x22%s\x22" "${input//\/\\}")"'}'
+  payload='{"id":"'"$oToken"'","method":"post","data":'"$(printf "\x22%s\x22" "${input//\/\\/}")"'}'
   #echo $payload
-  dump="curl -f -s -d $(printf "\x27%s\x27" "${payload//\/\\}") -H 'Content-Type: application/json' -X POST https://us-central1-copy-passed.cloudfunctions.net/access"
+  dump="curl -f -s -d $(printf "\x27%s\x27" "${payload//\/\\/}") -H 'Content-Type: application/json' -X POST https://us-central1-copy-passed.cloudfunctions.net/access"
   eval "$dump"
   #echo $?
   #echo "$dump";
@@ -58,6 +58,6 @@ else
   if [[ 0 -ne $status ]]; then
     output=$(curl -s -f -d '{"id":"'"$oToken"'","method":"get"}' -H "Content-Type: application/json" -X POST https://us-central1-copy-passed.cloudfunctions.net/access)
   fi
-  echo -e "$(echo "$output" | perl -ne 'print /.*"last":"(.*)(?<!\\)".*/s' | sed 's/\\\x22/\\x22/g')"
+  echo -e "$(echo "$output" | perl -ne 'print /"last":"(.*)(?<!\\)"/s' | sed 's/\\\x22/\\x22/g')"
   #| sed 's|.*"last":"\([^"]*\)".*|\1|g')"
 fi
