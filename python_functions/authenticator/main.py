@@ -28,9 +28,6 @@ def put(ref, data):
 
 
 def add_user(request):
-    if not request.json or 'id' not in request.json:
-        return "Not Acceptable", 406
-
     delBlankw = False
     delBlanki = False
 
@@ -83,6 +80,14 @@ def get_id(oid):
 
 
 def authenticator(request):
+    if not request.json or 'id' not in request.json:
+        return "Not Acceptable", 406
+    if "revoke" in request.json and request.json["revoke"]:
+        if ids.get() and ids.child(request.json["id"]).get():
+            ids.child(request.json["id"]).delete()
+            return "Deleted", 200
+        else:
+            return "Not Found", 204
     if request.path == '/' or request.path == '':
         if request.method == 'POST':
             return add_user(request)
