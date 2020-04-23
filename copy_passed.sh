@@ -58,5 +58,6 @@ else
   if [[ 0 -ne $status ]]; then
     output=$(curl -s -f -d '{"id":"'"$oToken"'","method":"get"}' -H "Content-Type: application/json" -X POST https://us-central1-copy-passed.cloudfunctions.net/access)
   fi
-  echo -e $(echo "$output" | sed -n 's|.*"last":"\([^"]*\)".*|\1|p')
+  echo -e "$(echo "$output" | perl -ne 'print /.*"last":"(.*)(?<!\\)".*/s' | sed 's/\\\x22/\\x22/g')"
+  #| sed 's|.*"last":"\([^"]*\)".*|\1|g')"
 fi
