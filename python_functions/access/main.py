@@ -1,6 +1,7 @@
 import firebase_admin
 from firebase_admin import db
 from flask import jsonify
+from time import time
 
 firebase_admin.initialize_app(options={
     'databaseURL': 'https://copy-passed.firebaseio.com',
@@ -9,6 +10,8 @@ firebase_admin.initialize_app(options={
 ids = db.reference('ids')
 users = db.reference('users')
 
+deleteAfterDays = 7
+deleteAfterSeconds = deleteAfterDays * 86400
 
 def put(ref, data):
     orig = ref.get()
@@ -25,9 +28,13 @@ def process_data(request):
         return "Not Acceptable", 406
 
     if ids.get() and request.json["id"] in ids.get():
-        uid = ids.child(request.json["id"]).get()
+        uid = ids.child(request.json["id"]).child("uid").get()
     else:
         return "Forbidden", 403
+
+    for i, j in ids.get().items():
+        if j["timestamp"] <= time()-deleteAfterSeconds:
+            ids.child(i).delete()
 
     if request.json["method"] == "get":
         result = {"last": None}

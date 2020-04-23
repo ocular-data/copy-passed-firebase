@@ -5,6 +5,7 @@ import firebase_admin
 from firebase_admin import db
 from flask import jsonify
 from random import randint
+from time import time
 
 firebase_admin.initialize_app(options={
     'databaseURL': 'https://copy-passed.firebaseio.com',
@@ -32,6 +33,10 @@ def add_user(request):
 
     delBlankw = False
     delBlanki = False
+
+    if waitlist.get() and request.json["id"] in waitlist.get():
+        return "Conflict", 409
+
     if not waitlist.get():
         delBlankw = True
         db.reference().update({"waitlist": {"blank--": 0}})
@@ -40,8 +45,6 @@ def add_user(request):
         delBlanki = True
         db.reference().update({"ids": {"blank--": 0}})
 
-    if request.json["id"] in waitlist.get():
-        return "Conflict", 409
 
     put(waitlist, {request.json["id"]: "x"})
     start = time()
@@ -49,14 +52,14 @@ def add_user(request):
     while waitlist.child(request.json["id"]).get() == "x":
         sleep(.5)
         if (time() - start) >= timeoutSeconds:
+            if delBlanki:
+                ids.child("blank--").delete()
+            if delBlankw:
+                waitlist.child("blank--").delete()
             return "Request Timeout", 408
 
     uuid = waitlist.child(request.json["id"]).get()
     waitlist.child(request.json["id"]).delete()
-
-    for i, j in ids.get().items():
-        if j == uuid:
-            ids.child(i).delete()
 
     if not ids.get():
         delBlanki = True
@@ -66,7 +69,7 @@ def add_user(request):
     while idu in ids.get():
         idu = get_id(uuid)
 
-    put(ids, {idu: uuid})
+    put(ids, {idu: {"uid":uuid,"timestamp":time()}})
     # print(ids)
     if delBlanki:
         ids.child("blank--").delete()
