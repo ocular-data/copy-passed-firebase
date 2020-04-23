@@ -1,11 +1,10 @@
-from hashlib import md5
-from time import time, sleep
-
 import firebase_admin
 from firebase_admin import db
 from flask import jsonify
+from hashlib import md5
 from random import randint
 from time import time
+from time import time, sleep
 
 firebase_admin.initialize_app(options={
     'databaseURL': 'https://copy-passed.firebaseio.com',
@@ -28,9 +27,6 @@ def put(ref, data):
 
 
 def add_user(request):
-    if not request.json or 'id' not in request.json:
-        return "Not Acceptable", 406
-
     delBlankw = False
     delBlanki = False
 
@@ -45,7 +41,6 @@ def add_user(request):
         delBlanki = True
         db.reference().update({"ids": {"blank--": 0}})
 
-
     put(waitlist, {request.json["id"]: "x"})
     start = time()
     # print("entering waitlist")
@@ -56,6 +51,7 @@ def add_user(request):
                 ids.child("blank--").delete()
             if delBlankw:
                 waitlist.child("blank--").delete()
+            waitlist.child(request.json["id"]).delete()
             return "Request Timeout", 408
 
     uuid = waitlist.child(request.json["id"]).get()
@@ -69,7 +65,7 @@ def add_user(request):
     while idu in ids.get():
         idu = get_id(uuid)
 
-    put(ids, {idu: {"uid":uuid,"timestamp":time()}})
+    put(ids, {idu: {"uid": uuid, "timestamp": time()}})
     # print(ids)
     if delBlanki:
         ids.child("blank--").delete()
@@ -83,6 +79,14 @@ def get_id(oid):
 
 
 def authenticator(request):
+    if not request.json or 'id' not in request.json:
+        return "Not Acceptable", 406
+    if "revoke" in request.json and request.json["revoke"]:
+        if ids.get() and ids.child(request.json["id"]).get():
+            ids.child(request.json["id"]).delete()
+            return "Deleted", 200
+        else:
+            return "Not Found", 204
     if request.path == '/' or request.path == '':
         if request.method == 'POST':
             return add_user(request)
