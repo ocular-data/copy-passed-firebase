@@ -1,9 +1,23 @@
 {
   "rules": {
+    "ids": {
+      ".read": false,
+      ".write": false
+    },
+    "waitlist": {
+      ".read": "auth!=null",
+      ".write": "auth!=null"
+    },
     "users": {
       "$uid": {
-        ".read": true,
-        ".write": true
+        "history": {
+          ".read": "$uid == auth.uid",
+          ".write": false
+        },
+        "last": {
+          ".read": "$uid == auth.uid",
+          ".write": "$uid == auth.uid"
+        }
       }
     }
   }

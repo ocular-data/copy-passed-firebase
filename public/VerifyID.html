@@ -13,9 +13,10 @@
     <script src="/__/firebase/7.14.1/firebase-messaging.js"></script>
     <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
     <script>
         // Your web app's Firebase configuration
-        var firebaseConfig = {
+        const firebaseConfig = {
             apiKey: "AIzaSyCoWN0kJax58ltz0YRE0Cma1tYh09lnLjw",
             authDomain: "copy-passed.firebaseapp.com",
             databaseURL: "https://copy-passed.firebaseio.com",
@@ -90,10 +91,10 @@
                 const k = `waitlist/${id}`;
                 const ref = firebase.database().ref(k);
                 ref.once("value", snapshot => {
-                    if (snapshot.key) {
+                    if (snapshot.exists()) {
                         // exists
                         ref.set(uid);
-                        window.location.href= "/";
+                        window.location.href = "/";
                     } else {
                         //doesnt exist
                         window.location.replace("/");
