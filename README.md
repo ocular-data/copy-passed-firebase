@@ -4,13 +4,19 @@
 ---
 
 ## Features 
-- [x] android app
 - [x] website
-- [x] bash console access
-- [ ] ios app
-- [ ] ~~windows console access~~
-- [ ] go application
-- [x] multiple registered consoles
+- [x] keep history of clipboard
+- [x] api for consoles
+- [ ] groups
+
+---
+
+## linked projects
+[Android project](https://github.com/ocular-data/copy-passed-android)
+
+[Native console access](https://github.com/ocular-data/copy-passed-terminalAccess)
+
+[GO clipboard](https://github.com/ocular-data/copy-passed-go)
 
 ---
 
