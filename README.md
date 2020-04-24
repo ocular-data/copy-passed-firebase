@@ -2,17 +2,20 @@
 #### A remote clipboard application
 
 ---
+[site](https://copy-passed.web.app)
+---
 
 ## Features 
 - [x] website
 - [x] keep history of clipboard
 - [x] api for consoles
 - [ ] groups
+- [ ] encrypt data in storage (for safer storage of passwords)
 
 ---
 
 ## linked projects
-[Android project](https://github.com/ocular-data/copy-passed-android)
+[Android app](https://github.com/ocular-data/copy-passed-android)
 
 [Native console access](https://github.com/ocular-data/copy-passed-terminalAccess)
 
