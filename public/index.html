@@ -4,29 +4,32 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+    <title>Copy-Passed Web app</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
 
     <!-- update the version number as needed -->
-    <script src="/__/firebase/7.14.1/firebase-app.js"></script>
+    <script src="/__/firebase/7.14.2/firebase-app.js"></script>
     <!-- include only the Firebase features as you need -->
-    <script src="/__/firebase/7.14.1/firebase-auth.js"></script>
-    <script src="/__/firebase/7.14.1/firebase-database.js"></script>
+    <script src="/__/firebase/7.14.2/firebase-auth.js"></script>
+    <script src="/__/firebase/7.14.2/firebase-database.js"></script>
+    <script src="/__/firebase/7.14.2/firebase-analytics.js"></script>
     <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css"/>
     <script>
         // Your web app's Firebase configuration
-        var firebaseConfig = {
+        const firebaseConfig = {
             apiKey: "AIzaSyCoWN0kJax58ltz0YRE0Cma1tYh09lnLjw",
             authDomain: "copy-passed.firebaseapp.com",
             databaseURL: "https://copy-passed.firebaseio.com",
             projectId: "copy-passed",
             storageBucket: "copy-passed.appspot.com",
             messagingSenderId: "789070643371",
-            appId: "1:789070643371:web:2b5e2f3dc3e9f2987677ee"
+            appId: "1:789070643371:web:2b5e2f3dc3e9f2987677ee",
+            measurementId: "G-T02VVSCKP8"
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
 
         var ui = new firebaseui.auth.AuthUI(firebase.auth());
         var uiConfig = {
