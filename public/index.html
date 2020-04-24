@@ -107,18 +107,14 @@
     var uid=null;
     document.addEventListener('DOMContentLoaded', function () {
       firebase.auth().onAuthStateChanged(user => {
-//        u1 = user.getIdToken().then(idToken => {alert(idToken)}) ;
-        u2= user.getIdTokenResult();
-        u1 = user;
         if (user) {
           uid = user.uid;
-          var propList = "";
+          /*var propList = "";
           for(var propName in u1) {
-             if((typeof(u1[propName]) != "undefined")){  /*} && ( propName.includes('oken'))) {*/
+             if((typeof(u1[propName]) != "undefined")){  /} && ( propName.includes('oken'))) {/
                 propList += (propName + ", "+ u1[propName] +" -\n-n-n-\n---- ");
               }
-           }
-  
+           } */
           toggle('logged_in', 'flex');
           toggle('signed_out', 'none');
           document.getElementById('r1').innerText = 'Signed in as : ' + (user.display_name || user.email);
