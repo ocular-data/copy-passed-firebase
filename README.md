@@ -10,7 +10,7 @@
 - [ ] ios app
 - [ ] ~~windows console access~~
 - [ ] go application
-- [x] multiple consoles
+- [x] multiple registered consoles
 
 ---
 
